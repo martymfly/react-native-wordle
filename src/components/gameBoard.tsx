@@ -1,23 +1,18 @@
 import { useState } from "react";
 import { View, Text, StyleSheet, Button } from "react-native";
-import { guess } from "../types";
+import { useAppSelector } from "../hooks/storeHooks";
 import { HEIGHT, SIZE } from "../utils/constants";
 import Keyboard from "./keyboard";
 
 interface GameBoardProps {
   answer: string;
-  guesses: guess[];
   handleGuess: (keyPressed: string) => void;
   resetGame: () => void;
 }
 
-const GameBoard = ({
-  answer,
-  guesses,
-  handleGuess,
-  resetGame,
-}: GameBoardProps) => {
+const GameBoard = ({ answer, handleGuess, resetGame }: GameBoardProps) => {
   const [showAnswer, setShowAnswer] = useState(false);
+  const { guesses } = useAppSelector((state) => state.gameState);
   return (
     <View style={styles.board}>
       <View style={styles.blocksContainer}>
