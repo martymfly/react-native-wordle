@@ -42,7 +42,9 @@ const GameBoard = ({ answer, handleGuess, resetGame }: GameBoardProps) => {
           title="Show Answer"
           onPress={() => setShowAnswer((prev) => !prev)}
         />
-        {showAnswer && <Text>{answer}</Text>}
+        {showAnswer && (
+          <Text style={{ marginLeft: 5, color: "white" }}>{answer}</Text>
+        )}
       </View>
     </View>
   );

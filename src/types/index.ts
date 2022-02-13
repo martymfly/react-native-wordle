@@ -5,4 +5,9 @@ export type guess = {
   isCorrect: boolean;
 };
 
+export type matchingUsedKey = {
+  key: string;
+  matchStatus: matchStatus;
+};
+
 export type matchStatus = "correct" | "present" | "absent" | "";

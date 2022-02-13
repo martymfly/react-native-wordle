@@ -15,7 +15,7 @@ import {
   setCurrentGuessIndex,
   setGameWon,
   setSolution,
-  updateGuesses,
+  setGuesses,
 } from "../store/slices/gameStateSlice";
 import AnimatedLottieView from "lottie-react-native";
 
@@ -40,7 +40,7 @@ export default function Game() {
         if (idx === currentGuessIndex) return updatedGuess;
         else return guess;
       });
-      dispatch(updateGuesses([...updatedGuesses]));
+      dispatch(setGuesses([...updatedGuesses]));
     } else if (keyPressed === "<") {
       currentGuessLetters[lastNonEmptyIndex] = "";
       let updatedGuess = { ...currentGuess, letters: currentGuessLetters };
@@ -48,7 +48,7 @@ export default function Game() {
         if (idx === currentGuessIndex) return updatedGuess;
         else return guess;
       });
-      dispatch(updateGuesses([...updatedGuesses]));
+      dispatch(setGuesses([...updatedGuesses]));
     }
   };
 
@@ -56,12 +56,7 @@ export default function Game() {
     let currentGuessedWord = currentGuess.letters.join("");
     if (currentGuessedWord.length === 5) {
       if (currentGuessedWord === solution) {
-        let matches = currentGuess.letters.map((letter, idx) => {
-          if (letter === solution[idx]) return "correct";
-          else if (solution.includes(letter)) return "present";
-          else return "absent";
-        });
-
+        let matches = ["correct", "correct", "correct", "correct", "correct"];
         let updatedGuess = {
           ...currentGuess,
           matches,
@@ -72,16 +67,32 @@ export default function Game() {
           if (idx === currentGuessIndex) return updatedGuess;
           else return guess;
         });
-        dispatch(updateGuesses(updatedGuesses));
+        dispatch(setGuesses(updatedGuesses));
         dispatch(setGameWon(true));
         setTimeout(() => {
           lottieRef.current?.play();
         }, 250 * 6);
       } else if (words.concat(answers).includes(currentGuessedWord)) {
         let matches = currentGuess.letters.map((letter, idx) => {
+          let currentSlice = currentGuessedWord.slice(0, idx);
+          let presentLetterCount = solution
+            .split("")
+            .filter((x) => x === letter).length;
           if (letter === solution[idx]) return "correct";
-          else if (solution.includes(letter)) return "present";
-          else return "absent";
+          else {
+            if (solution.includes(letter)) {
+              if (!currentSlice.includes(letter)) {
+                return "present";
+              } else {
+                let currentSlicePresentCount = currentSlice
+                  .split("")
+                  .filter((x) => x === letter).length;
+                if (currentSlicePresentCount < presentLetterCount)
+                  return "present";
+                else return "absent";
+              }
+            } else return "absent";
+          }
         });
         let updatedGuess = {
           ...currentGuess,
@@ -93,7 +104,7 @@ export default function Game() {
           if (idx === currentGuessIndex) return updatedGuess;
           else return guess;
         });
-        dispatch(updateGuesses(updatedGuesses));
+        dispatch(setGuesses(updatedGuesses));
         dispatch(setCurrentGuessIndex(currentGuessIndex + 1));
       } else {
         alert("Not in word list");
@@ -111,7 +122,7 @@ export default function Game() {
   };
 
   const resetGameState = () => {
-    dispatch(updateGuesses([...initialGuesses]));
+    dispatch(setGuesses([...initialGuesses]));
   };
 
   const resetGame = () => {
