@@ -45,7 +45,14 @@ export default function Keyboard({ handleGuess }: KeyboardProps) {
                 }}
                 onPress={() => handleGuess(keyboardKey)}
               >
-                <Text style={styles.keyboardKey}>{keyboardKey}</Text>
+                <Text
+                  style={{
+                    ...styles.keyboardKey,
+                    fontSize: keyboardKey === "Enter" ? 10 : 18,
+                  }}
+                >
+                  {keyboardKey}
+                </Text>
               </TouchableOpacity>
             );
           })}
@@ -65,7 +72,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   keyContainer: {
-    height: SIZE / 11 + 15,
+    height: SIZE / 11 + 20,
     borderWidth: 1,
     borderColor: "gray",
     margin: 1,
@@ -76,6 +83,6 @@ const styles = StyleSheet.create({
   keyboardKey: {
     textTransform: "uppercase",
     color: "white",
-    fontWeight: "bold",
+    fontFamily: "Montserrat_800ExtraBold",
   },
 });

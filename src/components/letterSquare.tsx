@@ -129,7 +129,7 @@ const styles = StyleSheet.create({
   letter: {
     fontSize: SIZE / 12,
     fontWeight: "bold",
-    fontFamily: "monospace",
+    fontFamily: "Montserrat_800ExtraBold",
     textTransform: "uppercase",
   },
 });
