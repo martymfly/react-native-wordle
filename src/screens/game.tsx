@@ -1,5 +1,13 @@
+import { useRef } from "react";
+import { View } from "react-native";
 import GameBoard from "../components/gameBoard";
-import { answers, initialGuesses, words } from "../utils/constants";
+import {
+  answers,
+  HEIGHT,
+  initialGuesses,
+  SIZE,
+  words,
+} from "../utils/constants";
 import { guess } from "../types";
 
 import { useAppSelector, useAppDispatch } from "../hooks/storeHooks";
@@ -9,11 +17,13 @@ import {
   setSolution,
   updateGuesses,
 } from "../store/slices/gameStateSlice";
+import AnimatedLottieView from "lottie-react-native";
 
 export default function Game() {
   const { guesses, currentGuessIndex, gameWon, solution } = useAppSelector(
     (state) => state.gameState
   );
+  const lottieRef = useRef<AnimatedLottieView>(null);
   const dispatch = useAppDispatch();
 
   const updateGuess = (keyPressed: string, currentGuess: guess) => {
@@ -64,7 +74,9 @@ export default function Game() {
         });
         dispatch(updateGuesses(updatedGuesses));
         dispatch(setGameWon(true));
-        alert("You won!");
+        setTimeout(() => {
+          lottieRef.current?.play();
+        }, 250 * 6);
       } else if (words.concat(answers).includes(currentGuessedWord)) {
         let matches = currentGuess.letters.map((letter, idx) => {
           if (letter === solution[idx]) return "correct";
@@ -103,6 +115,7 @@ export default function Game() {
   };
 
   const resetGame = () => {
+    lottieRef.current?.reset();
     resetGameState();
     dispatch(setCurrentGuessIndex(0));
     dispatch(setGameWon(false));
@@ -110,12 +123,24 @@ export default function Game() {
   };
 
   return (
-    <>
+    <View style={{ position: "relative" }}>
       <GameBoard
         answer={solution}
         handleGuess={handleGuess}
         resetGame={resetGame}
       />
-    </>
+      <AnimatedLottieView
+        ref={lottieRef}
+        style={{
+          width: SIZE,
+          height: HEIGHT * 0.5,
+          backgroundColor: "transparent",
+          position: "absolute",
+          zIndex: 10,
+          top: 20,
+        }}
+        source={require("../lottie/confetti.json")}
+      />
+    </View>
   );
 }

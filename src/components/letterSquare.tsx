@@ -65,7 +65,7 @@ const LetterSquare = ({ guess, letter, idx }: LetterSquareProps) => {
   });
   useEffect(() => {
     if (letter !== "" && matchStatus === "") {
-      scale.value = withTiming(1.5, {
+      scale.value = withTiming(1.2, {
         duration: 50,
         easing: Easing.bezier(0.25, 0.1, 0.25, 1),
       });
@@ -117,13 +117,14 @@ export default LetterSquare;
 
 const styles = StyleSheet.create({
   square: {
-    width: SIZE / 7,
-    height: SIZE / 7,
-    borderWidth: 2,
-    borderColor: "gray",
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
+    width: SIZE / 6.2,
+    height: SIZE / 6.2,
+    borderWidth: 2,
+    borderColor: "gray",
+    borderRadius: 10,
   },
   letter: {
     fontSize: SIZE / 12,

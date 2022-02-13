@@ -1,9 +1,12 @@
 import { useState } from "react";
 import { View, Text, StyleSheet, Button } from "react-native";
-import { useAppSelector } from "../hooks/storeHooks";
-import { HEIGHT, SIZE } from "../utils/constants";
+
 import Keyboard from "./keyboard";
 import LetterSquare from "./letterSquare";
+
+import { useAppSelector } from "../hooks/storeHooks";
+
+import { HEIGHT, SIZE } from "../utils/constants";
 
 interface GameBoardProps {
   answer: string;
