@@ -16,15 +16,28 @@ import {
   setGameWon,
   setSolution,
   setGuesses,
+  setUsedKeys,
 } from "../store/slices/gameStateSlice";
 import AnimatedLottieView from "lottie-react-native";
 
 export default function Game() {
-  const { guesses, currentGuessIndex, gameWon, solution } = useAppSelector(
-    (state) => state.gameState
-  );
+  const { guesses, usedKeys, currentGuessIndex, gameWon, solution } =
+    useAppSelector((state) => state.gameState);
   const lottieRef = useRef<AnimatedLottieView>(null);
   const dispatch = useAppDispatch();
+
+  const handleFoundKeysOnKeyboard = (guess: any) => {
+    let tempUsedKeys = { ...usedKeys };
+    guess.letters.forEach((letter: string, idx: number) => {
+      const keyValue = tempUsedKeys[letter];
+      if (!keyValue) tempUsedKeys[letter] = guess.matches[idx];
+      else if (keyValue === "correct") return;
+      else if (keyValue && guess.matches[idx] === "correct") {
+        tempUsedKeys[letter] = "correct";
+      } else tempUsedKeys[letter] = guess.matches[idx];
+    });
+    dispatch(setUsedKeys(tempUsedKeys));
+  };
 
   const updateGuess = (keyPressed: string, currentGuess: guess) => {
     let currentGuessLetters = [...currentGuess.letters];
@@ -72,14 +85,16 @@ export default function Game() {
         setTimeout(() => {
           lottieRef.current?.play();
         }, 250 * 6);
+        handleFoundKeysOnKeyboard(updatedGuess);
       } else if (words.concat(answers).includes(currentGuessedWord)) {
         let matches = currentGuess.letters.map((letter, idx) => {
           let currentSlice = currentGuessedWord.slice(0, idx);
           let presentLetterCount = solution
             .split("")
             .filter((x) => x === letter).length;
-          if (letter === solution[idx]) return "correct";
-          else {
+          if (letter === solution[idx]) {
+            return "correct";
+          } else {
             if (solution.includes(letter)) {
               if (!currentSlice.includes(letter)) {
                 return "present";
@@ -87,11 +102,15 @@ export default function Game() {
                 let currentSlicePresentCount = currentSlice
                   .split("")
                   .filter((x) => x === letter).length;
-                if (currentSlicePresentCount < presentLetterCount)
+                if (currentSlicePresentCount < presentLetterCount) {
                   return "present";
-                else return "absent";
+                } else {
+                  return "absent";
+                }
               }
-            } else return "absent";
+            } else {
+              return "absent";
+            }
           }
         });
         let updatedGuess = {
@@ -106,6 +125,7 @@ export default function Game() {
         });
         dispatch(setGuesses(updatedGuesses));
         dispatch(setCurrentGuessIndex(currentGuessIndex + 1));
+        handleFoundKeysOnKeyboard(updatedGuess);
       } else {
         alert("Not in word list");
       }
@@ -129,6 +149,7 @@ export default function Game() {
     lottieRef.current?.reset();
     resetGameState();
     dispatch(setCurrentGuessIndex(0));
+    dispatch(setUsedKeys([]));
     dispatch(setGameWon(false));
     dispatch(setSolution(answers[Math.floor(Math.random() * answers.length)]));
   };

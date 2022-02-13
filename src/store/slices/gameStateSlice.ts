@@ -5,7 +5,7 @@ import { answers, initialGuesses } from "../../utils/constants";
 
 interface gameState {
   guesses: guess[];
-  usedKeys: matchingUsedKey[];
+  usedKeys: matchingUsedKey;
   gameWon: boolean;
   currentGuessIndex: number;
   solution: string;
@@ -13,7 +13,7 @@ interface gameState {
 
 const initialState: gameState = {
   guesses: [...initialGuesses],
-  usedKeys: [],
+  usedKeys: {},
   gameWon: false,
   currentGuessIndex: 0,
   solution: answers[Math.floor(Math.random() * answers.length)],
@@ -41,8 +41,13 @@ export const gameStateSlice = createSlice({
   },
 });
 
-export const { setGuesses, setCurrentGuessIndex, setSolution, setGameWon } =
-  gameStateSlice.actions;
+export const {
+  setGuesses,
+  setUsedKeys,
+  setCurrentGuessIndex,
+  setSolution,
+  setGameWon,
+} = gameStateSlice.actions;
 
 export const gameState = (state: RootState) => state.gameState;
 

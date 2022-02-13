@@ -11,7 +11,7 @@ import Animated, {
 } from "react-native-reanimated";
 import interpolateColorBugFix from "../utils/interpolateColorFix";
 
-import { SIZE } from "../utils/constants";
+import { colors, SIZE } from "../utils/constants";
 import { guess } from "../types";
 
 interface LetterSquareProps {
@@ -33,24 +33,24 @@ const LetterSquare = ({ guess, letter, idx }: LetterSquareProps) => {
     "worklet";
     switch (matchStatus) {
       case "correct":
-        return "#6aaa64";
+        return colors.correct;
       case "present":
-        return "#c9b458";
+        return colors.present;
       case "absent":
-        return "#939598";
+        return colors.absent;
       case "":
-        return "#ffffff";
+        return colors.white;
       default:
-        return "#ffffff";
+        return colors.white;
     }
   }
 
   const bgStyle = useAnimatedStyle(() => {
-    const color = matchColor();
+    const colorByMatch = matchColor();
     const backgroundColor = interpolateColorBugFix(
       progress.value,
       [0, 1],
-      ["#ffffff", color]
+      [colors.white, colorByMatch]
     );
 
     return { backgroundColor };

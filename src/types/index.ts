@@ -6,8 +6,7 @@ export type guess = {
 };
 
 export type matchingUsedKey = {
-  key: string;
-  matchStatus: matchStatus;
+  [key: string]: matchStatus;
 };
 
 export type matchStatus = "correct" | "present" | "absent" | "";

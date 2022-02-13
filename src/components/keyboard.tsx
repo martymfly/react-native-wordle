@@ -1,6 +1,7 @@
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import React from "react";
-import { SIZE } from "../utils/constants";
+import { colors, SIZE } from "../utils/constants";
+import { useAppSelector } from "../hooks/storeHooks";
 
 const keys: string[][] = [
   ["q", "w", "e", "r", "t", "y", "u", "i", "o", "p"],
@@ -13,6 +14,19 @@ interface KeyboardProps {
 }
 
 export default function Keyboard({ handleGuess }: KeyboardProps) {
+  const { usedKeys } = useAppSelector((state) => state.gameState);
+  const handleKeyboardKeyColor = (key: string) => {
+    const keyData = usedKeys[key];
+    if (keyData) {
+      if (keyData === "correct") {
+        return colors.correct;
+      } else if (keyData === "present") {
+        return colors.present;
+      } else if (keyData === "absent") {
+        return colors.absent;
+      } else return "transparent";
+    } else return "transparent";
+  };
   return (
     <View style={{ height: 200 }}>
       {keys.map((keysRow, idx) => (
@@ -23,6 +37,7 @@ export default function Keyboard({ handleGuess }: KeyboardProps) {
                 key={keyboardKey}
                 style={{
                   ...styles.keyContainer,
+                  backgroundColor: handleKeyboardKeyColor(keyboardKey),
                   width:
                     keyboardKey === "<" || keyboardKey === "Enter"
                       ? (SIZE * 3) / 11 / 2
