@@ -1,22 +1,20 @@
-import { useState } from "react";
-import { View, Text, StyleSheet, Button } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 
 import Keyboard from "./keyboard";
 import LetterSquare from "./letterSquare";
 
 import { useAppSelector } from "../hooks/storeHooks";
 
-import { HEIGHT, SIZE } from "../utils/constants";
+import { colors, HEIGHT, SIZE } from "../utils/constants";
 
 interface GameBoardProps {
-  answer: string;
+  solution: string;
   handleGuess: (keyPressed: string) => void;
   resetGame: () => void;
 }
 
-const GameBoard = ({ answer, handleGuess, resetGame }: GameBoardProps) => {
-  const [showAnswer, setShowAnswer] = useState(false);
-  const { guesses } = useAppSelector((state) => state.gameState);
+const GameBoard = ({ solution, handleGuess, resetGame }: GameBoardProps) => {
+  const { guesses, gameEnded } = useAppSelector((state) => state.gameState);
   return (
     <View style={styles.board}>
       <View style={styles.blocksContainer}>
@@ -35,17 +33,20 @@ const GameBoard = ({ answer, handleGuess, resetGame }: GameBoardProps) => {
           </View>
         ))}
       </View>
-      <Keyboard handleGuess={handleGuess} />
-      <View style={{ display: "flex", flexDirection: "row" }}>
-        <Button title="Reset Game" onPress={resetGame} />
-        <Button
-          title="Show Answer"
-          onPress={() => setShowAnswer((prev) => !prev)}
-        />
-        {showAnswer && (
-          <Text style={{ marginLeft: 5, color: "white" }}>{answer}</Text>
+      <View style={styles.gameResult}>
+        {gameEnded && (
+          <>
+            <Text style={styles.solutionText}>Solution: {solution}</Text>
+            <TouchableOpacity
+              style={styles.resetButton}
+              onPress={() => resetGame()}
+            >
+              <Text style={styles.resetButtonText}>New Game</Text>
+            </TouchableOpacity>
+          </>
         )}
       </View>
+      <Keyboard handleGuess={handleGuess} />
     </View>
   );
 };
@@ -56,14 +57,9 @@ const styles = StyleSheet.create({
   board: {
     width: SIZE,
     height: HEIGHT,
-    backgroundColor: "#282828",
+    backgroundColor: colors.bg,
     alignItems: "center",
     justifyContent: "space-evenly",
-  },
-  keyboard: {
-    width: SIZE,
-    height: HEIGHT * 0.4,
-    backgroundColor: "tomato",
   },
   squareBlock: {
     width: SIZE * 0.9,
@@ -75,10 +71,37 @@ const styles = StyleSheet.create({
   },
   blocksContainer: {
     width: SIZE * 0.9,
-    height: HEIGHT * 0.5,
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
     justifyContent: "space-evenly",
+  },
+  gameResult: {
+    width: SIZE,
+    height: 50,
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-evenly",
+  },
+  resetButton: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    width: 170,
+    height: 40,
+    borderRadius: 10,
+    backgroundColor: "#404040",
+  },
+  resetButtonText: {
+    fontFamily: "Montserrat_700Bold",
+    fontSize: 20,
+    color: "#fff",
+  },
+  solutionText: {
+    fontSize: 16,
+    fontFamily: "Montserrat_600SemiBold",
+    color: "#fff",
+    textTransform: "uppercase",
   },
 });

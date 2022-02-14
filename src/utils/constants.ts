@@ -6,8 +6,10 @@ export const { width: SIZE, height: HEIGHT } = Dimensions.get("window");
 export const colors = {
   correct: "#6aaa64",
   present: "#c9b458",
-  absent: "#939598",
+  absent: "#282828",
+  keyDefault: "#454545",
   white: "#ffffff",
+  bg: "#161616",
 };
 
 export const initialGuesses: guess[] = [

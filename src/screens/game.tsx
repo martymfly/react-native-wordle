@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { View } from "react-native";
 import GameBoard from "../components/gameBoard";
 import {
@@ -17,12 +17,15 @@ import {
   setSolution,
   setGuesses,
   setUsedKeys,
+  setGameEnded,
 } from "../store/slices/gameStateSlice";
 import AnimatedLottieView from "lottie-react-native";
 
 export default function Game() {
-  const { guesses, usedKeys, currentGuessIndex, gameWon, solution } =
-    useAppSelector((state) => state.gameState);
+  const { guesses, usedKeys, currentGuessIndex, gameWon } = useAppSelector(
+    (state) => state.gameState
+  );
+  const solution = "robin";
   const lottieRef = useRef<AnimatedLottieView>(null);
   const dispatch = useAppDispatch();
 
@@ -38,6 +41,19 @@ export default function Game() {
     });
     dispatch(setUsedKeys(tempUsedKeys));
   };
+
+  const checkGameEnd = () => {
+    const attemptsCount = guesses.filter((guess: guess) => {
+      return guess.isComplete;
+    }).length;
+    if (attemptsCount === 6) {
+      dispatch(setGameEnded(true));
+    }
+  };
+
+  useEffect(() => {
+    checkGameEnd();
+  }, [currentGuessIndex]);
 
   const updateGuess = (keyPressed: string, currentGuess: guess) => {
     let currentGuessLetters = [...currentGuess.letters];
@@ -81,9 +97,10 @@ export default function Game() {
           else return guess;
         });
         dispatch(setGuesses(updatedGuesses));
-        dispatch(setGameWon(true));
         setTimeout(() => {
           lottieRef.current?.play();
+          dispatch(setGameWon(true));
+          dispatch(setGameEnded(true));
         }, 250 * 6);
         handleFoundKeysOnKeyboard(updatedGuess);
       } else if (words.concat(answers).includes(currentGuessedWord)) {
@@ -151,13 +168,14 @@ export default function Game() {
     dispatch(setCurrentGuessIndex(0));
     dispatch(setUsedKeys([]));
     dispatch(setGameWon(false));
+    dispatch(setGameEnded(false));
     dispatch(setSolution(answers[Math.floor(Math.random() * answers.length)]));
   };
 
   return (
     <View style={{ position: "relative" }}>
       <GameBoard
-        answer={solution}
+        solution={solution}
         handleGuess={handleGuess}
         resetGame={resetGame}
       />

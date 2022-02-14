@@ -24,11 +24,11 @@ export default function Keyboard({ handleGuess }: KeyboardProps) {
         return colors.present;
       } else if (keyData === "absent") {
         return colors.absent;
-      } else return "transparent";
-    } else return "transparent";
+      } else return colors.keyDefault;
+    } else return colors.keyDefault;
   };
   return (
-    <View style={{ height: 200 }}>
+    <View style={styles.keyboardContainer}>
       {keys.map((keysRow, idx) => (
         <View key={idx} style={styles.keyboardRow}>
           {keysRow.map((keyboardKey) => {
@@ -63,6 +63,7 @@ export default function Keyboard({ handleGuess }: KeyboardProps) {
 }
 
 const styles = StyleSheet.create({
+  keyboardContainer: {},
   keyboardRow: {
     width: SIZE,
     marginBottom: 5,
@@ -73,8 +74,6 @@ const styles = StyleSheet.create({
   },
   keyContainer: {
     height: SIZE / 11 + 20,
-    borderWidth: 1,
-    borderColor: "gray",
     margin: 1,
     display: "flex",
     alignItems: "center",

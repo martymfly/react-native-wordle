@@ -39,9 +39,9 @@ const LetterSquare = ({ guess, letter, idx }: LetterSquareProps) => {
       case "absent":
         return colors.absent;
       case "":
-        return colors.white;
+        return colors.keyDefault;
       default:
-        return colors.white;
+        return colors.keyDefault;
     }
   }
 
@@ -50,7 +50,7 @@ const LetterSquare = ({ guess, letter, idx }: LetterSquareProps) => {
     const backgroundColor = interpolateColorBugFix(
       progress.value,
       [0, 1],
-      [colors.white, colorByMatch]
+      [colors.keyDefault, colorByMatch]
     );
 
     return { backgroundColor };
@@ -104,7 +104,7 @@ const LetterSquare = ({ guess, letter, idx }: LetterSquareProps) => {
       <Text
         style={{
           ...styles.letter,
-          color: guess.isComplete ? "white" : "black",
+          color: colors.white,
         }}
       >
         {letter}
@@ -120,10 +120,8 @@ const styles = StyleSheet.create({
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-    width: SIZE / 6.2,
-    height: SIZE / 6.2,
-    borderWidth: 2,
-    borderColor: "gray",
+    width: SIZE / 6.5,
+    height: SIZE / 6.5,
     borderRadius: 10,
   },
   letter: {

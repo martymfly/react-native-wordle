@@ -4,36 +4,41 @@ import { guess, matchingUsedKey } from "../../types";
 import { answers, initialGuesses } from "../../utils/constants";
 
 interface gameState {
-  guesses: guess[];
-  usedKeys: matchingUsedKey;
-  gameWon: boolean;
-  currentGuessIndex: number;
   solution: string;
+  guesses: guess[];
+  currentGuessIndex: number;
+  usedKeys: matchingUsedKey;
+  gameEnded: boolean;
+  gameWon: boolean;
 }
 
 const initialState: gameState = {
-  guesses: [...initialGuesses],
-  usedKeys: {},
-  gameWon: false,
-  currentGuessIndex: 0,
   solution: answers[Math.floor(Math.random() * answers.length)],
+  guesses: [...initialGuesses],
+  currentGuessIndex: 0,
+  usedKeys: {},
+  gameEnded: false,
+  gameWon: false,
 };
 
 export const gameStateSlice = createSlice({
   name: "gameState",
   initialState,
   reducers: {
+    setSolution: (state, action) => {
+      state.solution = action.payload;
+    },
     setGuesses: (state, action) => {
       state.guesses = action.payload;
-    },
-    setUsedKeys: (state, action) => {
-      state.usedKeys = action.payload;
     },
     setCurrentGuessIndex: (state, action) => {
       state.currentGuessIndex = action.payload;
     },
-    setSolution: (state, action) => {
-      state.solution = action.payload;
+    setUsedKeys: (state, action) => {
+      state.usedKeys = action.payload;
+    },
+    setGameEnded: (state, action) => {
+      state.gameEnded = action.payload;
     },
     setGameWon: (state, action) => {
       state.gameWon = action.payload;
@@ -42,10 +47,11 @@ export const gameStateSlice = createSlice({
 });
 
 export const {
-  setGuesses,
-  setUsedKeys,
-  setCurrentGuessIndex,
   setSolution,
+  setGuesses,
+  setCurrentGuessIndex,
+  setUsedKeys,
+  setGameEnded,
   setGameWon,
 } = gameStateSlice.actions;
 

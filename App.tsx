@@ -2,6 +2,8 @@ import { StyleSheet, View } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import {
   useFonts,
+  Montserrat_600SemiBold,
+  Montserrat_700Bold,
   Montserrat_800ExtraBold,
 } from "@expo-google-fonts/montserrat";
 import AppLoading from "expo-app-loading";
@@ -12,6 +14,8 @@ import { store } from "./src/store";
 
 export default function App() {
   let [fontsLoaded] = useFonts({
+    Montserrat_600SemiBold,
+    Montserrat_700Bold,
     Montserrat_800ExtraBold,
   });
 
