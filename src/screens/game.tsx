@@ -22,10 +22,8 @@ import {
 import AnimatedLottieView from "lottie-react-native";
 
 export default function Game() {
-  const { guesses, usedKeys, currentGuessIndex, gameWon } = useAppSelector(
-    (state) => state.gameState
-  );
-  const solution = "robin";
+  const { guesses, usedKeys, currentGuessIndex, gameWon, solution } =
+    useAppSelector((state) => state.gameState);
   const lottieRef = useRef<AnimatedLottieView>(null);
   const dispatch = useAppDispatch();
 
