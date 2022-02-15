@@ -99,29 +99,27 @@ export default function Game() {
           lottieRef.current?.play();
           dispatch(setGameWon(true));
           dispatch(setGameEnded(true));
+          handleFoundKeysOnKeyboard(updatedGuess);
         }, 250 * 6);
-        handleFoundKeysOnKeyboard(updatedGuess);
       } else if (words.concat(answers).includes(currentGuessedWord)) {
+        let letterNotFound = solution
+          .split("")
+          .filter((letter, idx) => letter !== currentGuessedWord[idx]);
+
         let matches = currentGuess.letters.map((letter, idx) => {
-          let currentSlice = currentGuessedWord.slice(0, idx);
-          let presentLetterCount = solution
-            .split("")
-            .filter((x) => x === letter).length;
+          let currentLeftSlice = currentGuessedWord.slice(1, idx);
+          let countInLeftSlice =
+            currentLeftSlice.match(new RegExp(letter, "g"))?.length || 0;
+          let countInNotFoundLetters =
+            letterNotFound.join("").match(new RegExp(letter, "g"))?.length || 0;
           if (letter === solution[idx]) {
             return "correct";
           } else {
-            if (solution.includes(letter)) {
-              if (!currentSlice.includes(letter)) {
+            if (letterNotFound.includes(letter)) {
+              if (countInLeftSlice < countInNotFoundLetters) {
                 return "present";
               } else {
-                let currentSlicePresentCount = currentSlice
-                  .split("")
-                  .filter((x) => x === letter).length;
-                if (currentSlicePresentCount < presentLetterCount) {
-                  return "present";
-                } else {
-                  return "absent";
-                }
+                return "absent";
               }
             } else {
               return "absent";
