@@ -40,8 +40,8 @@ export default function Keyboard({ handleGuess }: KeyboardProps) {
                   backgroundColor: handleKeyboardKeyColor(keyboardKey),
                   width:
                     keyboardKey === "<" || keyboardKey === "Enter"
-                      ? (SIZE * 3) / 11 / 2
-                      : SIZE / 11,
+                      ? (SIZE * 3) / 12 / 2
+                      : SIZE / 12,
                 }}
                 onPress={() => handleGuess(keyboardKey)}
               >
@@ -73,11 +73,12 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   keyContainer: {
-    height: SIZE / 11 + 20,
-    margin: 1,
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
+    height: SIZE / 12 + 20,
+    margin: 2,
+    borderRadius: 5,
   },
   keyboardKey: {
     textTransform: "uppercase",

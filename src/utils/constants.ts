@@ -7,9 +7,9 @@ export const colors = {
   correct: "#6aaa64",
   present: "#c9b458",
   absent: "#282828",
-  keyDefault: "#454545",
+  keyDefault: "#606060",
   white: "#ffffff",
-  bg: "#161616",
+  bg: "#121212",
 };
 
 export const initialGuesses: guess[] = [
