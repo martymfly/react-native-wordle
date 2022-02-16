@@ -4,10 +4,16 @@ import { colors, SIZE } from "../utils/constants";
 import { useAppSelector } from "../hooks/storeHooks";
 import { Ionicons } from "@expo/vector-icons";
 
-const keys: string[][] = [
+const keysEN: string[][] = [
   ["q", "w", "e", "r", "t", "y", "u", "i", "o", "p"],
   ["a", "s", "d", "f", "g", "h", "j", "k", "l"],
   ["Enter", "z", "x", "c", "v", "b", "n", "m", "<"],
+];
+
+const keysTR: string[][] = [
+  ["e", "r", "t", "y", "u", "ı", "o", "p", "ğ", "ü"],
+  ["a", "s", "d", "f", "g", "h", "j", "k", "l", "ş", "i"],
+  ["Enter", "z", "c", "v", "b", "n", "m", "ö", "ç", "<"],
 ];
 
 interface KeyboardProps {
@@ -15,7 +21,8 @@ interface KeyboardProps {
 }
 
 export default function Keyboard({ handleGuess }: KeyboardProps) {
-  const { usedKeys } = useAppSelector((state) => state.gameState);
+  const { usedKeys, gameLanguage } = useAppSelector((state) => state.gameState);
+  const keyboard = gameLanguage === "en" ? keysEN : keysTR;
   const handleKeyboardKeyColor = (key: string) => {
     const keyData = usedKeys[key];
     if (keyData) {
@@ -30,19 +37,24 @@ export default function Keyboard({ handleGuess }: KeyboardProps) {
   };
   return (
     <View style={styles.keyboardContainer}>
-      {keys.map((keysRow, idx) => (
-        <View key={idx} style={styles.keyboardRow}>
+      {keyboard.map((keysRow, idx) => (
+        <View
+          key={idx}
+          style={{
+            ...styles.keyboardRow,
+            width: idx === 1 ? SIZE * 0.95 : SIZE,
+          }}
+        >
           {keysRow.map((keyboardKey) => {
+            const keyRowCount = keysRow.length + 2;
             return (
               <TouchableOpacity
                 key={keyboardKey}
                 style={{
                   ...styles.keyContainer,
                   backgroundColor: handleKeyboardKeyColor(keyboardKey),
-                  width:
-                    keyboardKey === "<" || keyboardKey === "Enter"
-                      ? (SIZE * 3) / 12 / 2
-                      : SIZE / 12,
+                  height: SIZE / keyRowCount + 2 + 20,
+                  flex: keyboardKey === "<" || keyboardKey === "Enter" ? 2 : 1,
                 }}
                 onPress={() => handleGuess(keyboardKey)}
               >
@@ -55,7 +67,7 @@ export default function Keyboard({ handleGuess }: KeyboardProps) {
                   <Text
                     style={{
                       ...styles.keyboardKey,
-                      fontSize: keyboardKey === "Enter" ? 10 : 18,
+                      fontSize: keyboardKey === "Enter" ? 12 : 18,
                     }}
                   >
                     {keyboardKey}
@@ -71,7 +83,7 @@ export default function Keyboard({ handleGuess }: KeyboardProps) {
 }
 
 const styles = StyleSheet.create({
-  keyboardContainer: {},
+  keyboardContainer: { display: "flex", alignItems: "center" },
   keyboardRow: {
     width: SIZE,
     marginBottom: 5,
@@ -84,7 +96,6 @@ const styles = StyleSheet.create({
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-    height: SIZE / 12 + 20,
     margin: 2,
     borderRadius: 5,
   },

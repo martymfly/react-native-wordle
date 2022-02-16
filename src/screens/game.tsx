@@ -1,13 +1,7 @@
 import { useEffect, useRef } from "react";
-import { View } from "react-native";
-import GameBoard from "../components/gameBoard";
-import {
-  answers,
-  HEIGHT,
-  initialGuesses,
-  SIZE,
-  words,
-} from "../utils/constants";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import AnimatedLottieView from "lottie-react-native";
+import { HEIGHT, initialGuesses, SIZE } from "../utils/constants";
 import { guess } from "../types";
 
 import { useAppSelector, useAppDispatch } from "../hooks/storeHooks";
@@ -19,14 +13,54 @@ import {
   setUsedKeys,
   setGameEnded,
   setWrongGuessShake,
+  setGameStarted,
+  setGameLanguage,
 } from "../store/slices/gameStateSlice";
-import AnimatedLottieView from "lottie-react-native";
+import { answersEN, answersTR, wordsEN, wordsTR } from "../words";
+import GameBoard from "../components/gameBoard";
+import { getStoreData } from "../utils/localStorageFuncs";
 
 export default function Game() {
-  const { guesses, usedKeys, currentGuessIndex, gameWon, gameEnded, solution } =
-    useAppSelector((state) => state.gameState);
-  const lottieRef = useRef<AnimatedLottieView>(null);
+  const {
+    guesses,
+    usedKeys,
+    currentGuessIndex,
+    gameStarted,
+    gameEnded,
+    gameWon,
+    solution,
+    gameLanguage,
+  } = useAppSelector((state) => state.gameState);
   const dispatch = useAppDispatch();
+
+  (async () => {
+    const gameLanguage = (await getStoreData("language")) || "en";
+    dispatch(setGameLanguage(gameLanguage));
+  })();
+
+  const lottieRef = useRef<AnimatedLottieView>(null);
+
+  const wordList = () => {
+    switch (gameLanguage) {
+      case "en":
+        return wordsEN.concat(answersEN);
+      case "tr":
+        return wordsTR.concat(answersTR);
+      default:
+        return wordsEN.concat(answersEN);
+    }
+  };
+
+  const answers = (): string[] => {
+    switch (gameLanguage) {
+      case "en":
+        return answersEN;
+      case "tr":
+        return answersTR;
+      default:
+        return answersEN;
+    }
+  };
 
   const handleFoundKeysOnKeyboard = (guess: any) => {
     let tempUsedKeys = { ...usedKeys };
@@ -105,7 +139,7 @@ export default function Game() {
           dispatch(setGameEnded(true));
           handleFoundKeysOnKeyboard(updatedGuess);
         }, 250 * 6);
-      } else if (words.concat(answers).includes(currentGuessedWord)) {
+      } else if (wordList().includes(currentGuessedWord)) {
         let matches: string[] = [];
         currentGuessedWord.split("").forEach((letter, index) => {
           let leftSlice = currentGuessedWord.slice(0, index + 1);
@@ -176,14 +210,24 @@ export default function Game() {
 
   const resetGame = () => {
     lottieRef.current?.reset();
+    dispatch(setGameStarted(true));
     resetGameState();
     dispatch(setCurrentGuessIndex(0));
     dispatch(setUsedKeys([]));
     dispatch(setGameWon(false));
     dispatch(setGameEnded(false));
-    dispatch(setSolution(answers[Math.floor(Math.random() * answers.length)]));
+    dispatch(
+      setSolution(answers()[Math.floor(Math.random() * answers().length)])
+    );
   };
-
+  if (!gameStarted)
+    return (
+      <View style={styles.newGameScreen}>
+        <TouchableOpacity onPress={resetGame}>
+          <Text style={{ color: "white", fontSize: 20 }}>Start a new game</Text>
+        </TouchableOpacity>
+      </View>
+    );
   return (
     <View style={{ position: "relative" }}>
       <GameBoard
@@ -193,16 +237,26 @@ export default function Game() {
       />
       <AnimatedLottieView
         ref={lottieRef}
-        style={{
-          width: SIZE,
-          height: HEIGHT * 0.5,
-          backgroundColor: "transparent",
-          position: "absolute",
-          zIndex: 10,
-          top: 20,
-        }}
+        style={styles.lottieContainer}
         source={require("../lottie/confetti.json")}
       />
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  lottieContainer: {
+    width: SIZE,
+    height: HEIGHT * 0.5,
+    backgroundColor: "transparent",
+    position: "absolute",
+    zIndex: 10,
+    top: 20,
+  },
+  newGameScreen: {
+    flex: 1,
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+});

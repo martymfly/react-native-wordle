@@ -1,26 +1,30 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { RootState } from "..";
 import { guess, matchingUsedKey } from "../../types";
-import { answers, initialGuesses } from "../../utils/constants";
+import { initialGuesses } from "../../utils/constants";
 
 interface gameState {
   solution: string;
   guesses: guess[];
   currentGuessIndex: number;
   usedKeys: matchingUsedKey;
+  gameStarted: boolean;
   gameEnded: boolean;
   gameWon: boolean;
   wrongGuessShake: boolean;
+  gameLanguage: string;
 }
 
 const initialState: gameState = {
-  solution: answers[Math.floor(Math.random() * answers.length)],
+  solution: "",
   guesses: [...initialGuesses],
   currentGuessIndex: 0,
   usedKeys: {},
+  gameStarted: false,
   gameEnded: false,
   gameWon: false,
   wrongGuessShake: false,
+  gameLanguage: "en",
 };
 
 export const gameStateSlice = createSlice({
@@ -39,6 +43,9 @@ export const gameStateSlice = createSlice({
     setUsedKeys: (state, action) => {
       state.usedKeys = action.payload;
     },
+    setGameStarted: (state, action) => {
+      state.gameStarted = action.payload;
+    },
     setGameEnded: (state, action) => {
       state.gameEnded = action.payload;
     },
@@ -48,6 +55,9 @@ export const gameStateSlice = createSlice({
     setWrongGuessShake: (state, action) => {
       state.wrongGuessShake = action.payload;
     },
+    setGameLanguage: (state, action) => {
+      state.gameLanguage = action.payload;
+    },
   },
 });
 
@@ -56,9 +66,11 @@ export const {
   setGuesses,
   setCurrentGuessIndex,
   setUsedKeys,
+  setGameStarted,
   setGameEnded,
   setGameWon,
   setWrongGuessShake,
+  setGameLanguage,
 } = gameStateSlice.actions;
 
 export const gameState = (state: RootState) => state.gameState;
