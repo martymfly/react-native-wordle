@@ -10,6 +10,7 @@ interface gameState {
   usedKeys: matchingUsedKey;
   gameEnded: boolean;
   gameWon: boolean;
+  wrongGuessShake: boolean;
 }
 
 const initialState: gameState = {
@@ -19,6 +20,7 @@ const initialState: gameState = {
   usedKeys: {},
   gameEnded: false,
   gameWon: false,
+  wrongGuessShake: false,
 };
 
 export const gameStateSlice = createSlice({
@@ -43,6 +45,9 @@ export const gameStateSlice = createSlice({
     setGameWon: (state, action) => {
       state.gameWon = action.payload;
     },
+    setWrongGuessShake: (state, action) => {
+      state.wrongGuessShake = action.payload;
+    },
   },
 });
 
@@ -53,6 +58,7 @@ export const {
   setUsedKeys,
   setGameEnded,
   setGameWon,
+  setWrongGuessShake,
 } = gameStateSlice.actions;
 
 export const gameState = (state: RootState) => state.gameState;

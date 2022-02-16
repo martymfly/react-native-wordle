@@ -18,6 +18,7 @@ import {
   setGuesses,
   setUsedKeys,
   setGameEnded,
+  setWrongGuessShake,
 } from "../store/slices/gameStateSlice";
 import AnimatedLottieView from "lottie-react-native";
 
@@ -147,7 +148,10 @@ export default function Game() {
         dispatch(setCurrentGuessIndex(currentGuessIndex + 1));
         handleFoundKeysOnKeyboard(updatedGuess);
       } else {
-        alert("Not in word list");
+        dispatch(setWrongGuessShake(true));
+        setTimeout(() => {
+          dispatch(setWrongGuessShake(false));
+        }, 1000);
       }
     }
   };

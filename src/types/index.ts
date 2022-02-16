@@ -1,4 +1,5 @@
 export type guess = {
+  id: number;
   letters: string[];
   matches: matchStatus[];
   isComplete: boolean;

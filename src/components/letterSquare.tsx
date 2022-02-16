@@ -13,6 +13,7 @@ import interpolateColorBugFix from "../utils/interpolateColorFix";
 
 import { colors, SIZE } from "../utils/constants";
 import { guess } from "../types";
+import { useAppSelector } from "../hooks/storeHooks";
 
 interface LetterSquareProps {
   guess: guess;
@@ -21,6 +22,9 @@ interface LetterSquareProps {
 }
 
 const LetterSquare = ({ guess, letter, idx }: LetterSquareProps) => {
+  const { currentGuessIndex, wrongGuessShake } = useAppSelector(
+    (state) => state.gameState
+  );
   const scale = useSharedValue(1);
   const rotateDegree = useSharedValue(0);
   const progress = useDerivedValue(() => {
@@ -28,7 +32,9 @@ const LetterSquare = ({ guess, letter, idx }: LetterSquareProps) => {
       ? withDelay(250 * idx, withTiming(1))
       : withDelay(250 * idx, withTiming(0));
   }, [guess]);
+  const shakeX = useSharedValue(0);
   const matchStatus = guess.matches[idx];
+
   function matchColor() {
     "worklet";
     switch (matchStatus) {
@@ -55,14 +61,17 @@ const LetterSquare = ({ guess, letter, idx }: LetterSquareProps) => {
 
     return { backgroundColor };
   });
+
   const animatedStyles = useAnimatedStyle(() => {
     return {
       transform: [
         { scale: scale.value },
         { rotateY: `${rotateDegree.value}deg` },
+        { translateX: shakeX.value },
       ],
     };
   });
+
   useEffect(() => {
     if (letter !== "" && matchStatus === "") {
       scale.value = withTiming(1.2, {
@@ -87,6 +96,42 @@ const LetterSquare = ({ guess, letter, idx }: LetterSquareProps) => {
       );
     }
   }, [letter, matchStatus]);
+
+  useEffect(() => {
+    if (wrongGuessShake && currentGuessIndex === guess.id) {
+      for (let i = 1; i < 6; i++) {
+        shakeX.value = withDelay(
+          10 * i,
+          withTiming(-5, {
+            duration: 15,
+            easing: Easing.linear,
+          })
+        );
+        shakeX.value = withDelay(
+          20 * i,
+          withTiming(6, {
+            duration: 30,
+            easing: Easing.linear,
+          })
+        );
+        shakeX.value = withDelay(
+          30 * i,
+          withTiming(-8, {
+            duration: 45,
+            easing: Easing.linear,
+          })
+        );
+        shakeX.value = withDelay(
+          40 * i,
+          withTiming(0, {
+            duration: 60,
+            easing: Easing.linear,
+          })
+        );
+      }
+    }
+  }, [wrongGuessShake]);
+
   return (
     <Animated.View
       entering={SlideInRight}

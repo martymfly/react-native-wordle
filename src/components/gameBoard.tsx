@@ -1,4 +1,5 @@
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import Animated, { FadeIn, FadeOut } from "react-native-reanimated";
 
 import Keyboard from "./keyboard";
 import LetterSquare from "./letterSquare";
@@ -14,7 +15,10 @@ interface GameBoardProps {
 }
 
 const GameBoard = ({ solution, handleGuess, resetGame }: GameBoardProps) => {
-  const { guesses, gameEnded } = useAppSelector((state) => state.gameState);
+  const { guesses, gameEnded, wrongGuessShake } = useAppSelector(
+    (state) => state.gameState
+  );
+
   return (
     <View style={styles.board}>
       <View style={styles.blocksContainer}>
@@ -44,6 +48,15 @@ const GameBoard = ({ solution, handleGuess, resetGame }: GameBoardProps) => {
               <Text style={styles.resetButtonText}>New Game</Text>
             </TouchableOpacity>
           </>
+        )}
+        {wrongGuessShake && (
+          <Animated.Text
+            entering={FadeIn}
+            exiting={FadeOut}
+            style={styles.wrongGuessText}
+          >
+            Not in word list
+          </Animated.Text>
         )}
       </View>
       <Keyboard handleGuess={handleGuess} />
@@ -103,5 +116,10 @@ const styles = StyleSheet.create({
     fontFamily: "Montserrat_600SemiBold",
     color: "#fff",
     textTransform: "uppercase",
+  },
+  wrongGuessText: {
+    fontFamily: "Montserrat_600SemiBold",
+    fontSize: 16,
+    color: colors.white,
   },
 });
