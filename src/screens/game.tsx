@@ -102,40 +102,47 @@ export default function Game() {
           handleFoundKeysOnKeyboard(updatedGuess);
         }, 250 * 6);
       } else if (words.concat(answers).includes(currentGuessedWord)) {
-        let letterNotFound = solution
-          .split("")
-          .filter((letter, idx) => letter !== currentGuessedWord[idx]);
+        let matches: string[] = [];
+        currentGuessedWord.split("").forEach((letter, index) => {
+          let leftSlice = currentGuessedWord.slice(0, index + 1);
+          let countInLeft = leftSlice
+            .split("")
+            .filter((item) => item === letter).length;
+          let totalCount = solution
+            .split("")
+            .filter((item) => item === letter).length;
+          let nonMatchingPairs = solution
+            .split("")
+            .filter((item, idx) => currentGuessedWord[idx] !== item);
 
-        let matches = currentGuess.letters.map((letter, idx) => {
-          let currentLeftSlice = currentGuessedWord.slice(1, idx);
-          let countInLeftSlice =
-            currentLeftSlice.match(new RegExp(letter, "g"))?.length || 0;
-          let countInNotFoundLetters =
-            letterNotFound.join("").match(new RegExp(letter, "g"))?.length || 0;
-          if (letter === solution[idx]) {
-            return "correct";
-          } else {
-            if (letterNotFound.includes(letter)) {
-              if (countInLeftSlice < countInNotFoundLetters) {
-                return "present";
-              } else {
-                return "absent";
-              }
+          if (letter === solution[index]) {
+            matches.push("correct");
+          } else if (solution.includes(letter)) {
+            if (
+              countInLeft <= totalCount &&
+              nonMatchingPairs.includes(letter)
+            ) {
+              matches.push("present");
             } else {
-              return "absent";
+              matches.push("absent");
             }
+          } else {
+            matches.push("absent");
           }
         });
+
         let updatedGuess = {
           ...currentGuess,
           matches,
           isComplete: true,
           isCorrect: false,
         };
+
         let updatedGuesses = guesses.map((guess, idx) => {
           if (idx === currentGuessIndex) return updatedGuess;
           else return guess;
         });
+
         dispatch(setGuesses(updatedGuesses));
         dispatch(setCurrentGuessIndex(currentGuessIndex + 1));
         handleFoundKeysOnKeyboard(updatedGuess);
