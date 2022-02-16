@@ -2,11 +2,12 @@ import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import React from "react";
 import { colors, SIZE } from "../utils/constants";
 import { useAppSelector } from "../hooks/storeHooks";
+import { Ionicons } from "@expo/vector-icons";
 
 const keys: string[][] = [
   ["q", "w", "e", "r", "t", "y", "u", "i", "o", "p"],
   ["a", "s", "d", "f", "g", "h", "j", "k", "l"],
-  ["<", "z", "x", "c", "v", "b", "n", "m", "Enter"],
+  ["Enter", "z", "x", "c", "v", "b", "n", "m", "<"],
 ];
 
 interface KeyboardProps {
@@ -45,14 +46,21 @@ export default function Keyboard({ handleGuess }: KeyboardProps) {
                 }}
                 onPress={() => handleGuess(keyboardKey)}
               >
-                <Text
-                  style={{
-                    ...styles.keyboardKey,
-                    fontSize: keyboardKey === "Enter" ? 10 : 18,
-                  }}
-                >
-                  {keyboardKey}
-                </Text>
+                {keyboardKey === "<" ? (
+                  <Ionicons
+                    name="backspace-outline"
+                    style={{ ...styles.keyboardKey, fontSize: 28 }}
+                  />
+                ) : (
+                  <Text
+                    style={{
+                      ...styles.keyboardKey,
+                      fontSize: keyboardKey === "Enter" ? 10 : 18,
+                    }}
+                  >
+                    {keyboardKey}
+                  </Text>
+                )}
               </TouchableOpacity>
             );
           })}

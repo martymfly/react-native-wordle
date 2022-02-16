@@ -23,7 +23,7 @@ import {
 import AnimatedLottieView from "lottie-react-native";
 
 export default function Game() {
-  const { guesses, usedKeys, currentGuessIndex, gameWon, solution } =
+  const { guesses, usedKeys, currentGuessIndex, gameWon, gameEnded, solution } =
     useAppSelector((state) => state.gameState);
   const lottieRef = useRef<AnimatedLottieView>(null);
   const dispatch = useAppDispatch();
@@ -32,11 +32,14 @@ export default function Game() {
     let tempUsedKeys = { ...usedKeys };
     guess.letters.forEach((letter: string, idx: number) => {
       const keyValue = tempUsedKeys[letter];
-      if (!keyValue) tempUsedKeys[letter] = guess.matches[idx];
-      else if (keyValue === "correct") return;
-      else if (keyValue && guess.matches[idx] === "correct") {
-        tempUsedKeys[letter] = "correct";
-      } else tempUsedKeys[letter] = guess.matches[idx];
+      if (!keyValue) {
+        tempUsedKeys[letter] = guess.matches[idx];
+      } else {
+        if (keyValue === "correct") return;
+        else if (keyValue === "present" && guess.matches[idx] === "correct") {
+          tempUsedKeys[letter] = "correct";
+        }
+      }
     });
     dispatch(setUsedKeys(tempUsedKeys));
   };
@@ -157,11 +160,13 @@ export default function Game() {
   };
 
   const handleGuess = (keyPressed: string) => {
-    let currentGuess = guesses[currentGuessIndex];
-    if (keyPressed !== "Enter" && !currentGuess.isComplete) {
-      updateGuess(keyPressed, currentGuess);
-    } else if (keyPressed === "Enter" && !gameWon) {
-      checkGuess(currentGuess);
+    if (!gameEnded) {
+      let currentGuess = guesses[currentGuessIndex];
+      if (keyPressed !== "Enter" && !currentGuess.isComplete) {
+        updateGuess(keyPressed, currentGuess);
+      } else if (keyPressed === "Enter" && !gameWon) {
+        checkGuess(currentGuess);
+      }
     }
   };
 
