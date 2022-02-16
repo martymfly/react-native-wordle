@@ -14,6 +14,7 @@ import interpolateColorBugFix from "../utils/interpolateColorFix";
 import { colors, SIZE } from "../utils/constants";
 import { guess } from "../types";
 import { useAppSelector } from "../hooks/storeHooks";
+import { adjustLetterDisplay } from "../utils/adjustLetterDisplay";
 
 interface LetterSquareProps {
   guess: guess;
@@ -22,7 +23,7 @@ interface LetterSquareProps {
 }
 
 const LetterSquare = ({ guess, letter, idx }: LetterSquareProps) => {
-  const { currentGuessIndex, wrongGuessShake } = useAppSelector(
+  const { currentGuessIndex, wrongGuessShake, gameLanguage } = useAppSelector(
     (state) => state.gameState
   );
   const scale = useSharedValue(1);
@@ -152,7 +153,7 @@ const LetterSquare = ({ guess, letter, idx }: LetterSquareProps) => {
           color: colors.white,
         }}
       >
-        {letter}
+        {adjustLetterDisplay(letter, gameLanguage)}
       </Text>
     </Animated.View>
   );

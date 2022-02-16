@@ -3,6 +3,7 @@ import React from "react";
 import { colors, SIZE } from "../utils/constants";
 import { useAppSelector } from "../hooks/storeHooks";
 import { Ionicons } from "@expo/vector-icons";
+import { adjustLetterDisplay } from "../utils/adjustLetterDisplay";
 
 const keysEN: string[][] = [
   ["q", "w", "e", "r", "t", "y", "u", "i", "o", "p"],
@@ -70,7 +71,7 @@ export default function Keyboard({ handleGuess }: KeyboardProps) {
                       fontSize: keyboardKey === "Enter" ? 12 : 18,
                     }}
                   >
-                    {keyboardKey}
+                    {adjustLetterDisplay(keyboardKey, gameLanguage)}
                   </Text>
                 )}
               </TouchableOpacity>
