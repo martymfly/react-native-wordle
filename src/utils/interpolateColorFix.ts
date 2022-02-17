@@ -1,9 +1,10 @@
 // https://github.com/software-mansion/react-native-reanimated/issues/2826#issue-1099818705
-
-import { interpolate } from "react-native-reanimated";
+/* eslint-disable */
+// @ts-nocheck
+import { interpolate } from 'react-native-reanimated';
 
 function hexToRGBA(hw: string) {
-  "worklet";
+  'worklet';
   if (hw.length === 4) {
     return {
       r: parseInt(hw.substr(1, 1), 16),
@@ -31,18 +32,18 @@ function colorToRGBA(
     | { r: number; g: number; b: number }
     | { r: number; g: number; b: number; a: number }
 ) {
-  "worklet";
-  if (typeof color === "string") {
-    if (color.startsWith("rgba(")) {
-      const colorProcessed = color.split("(")[1].split(")")[0].split(",");
+  'worklet';
+  if (typeof color === 'string') {
+    if (color.startsWith('rgba(')) {
+      const colorProcessed = color.split('(')[1].split(')')[0].split(',');
       return {
         r: parseInt(colorProcessed[0].trim()),
         g: parseInt(colorProcessed[1].trim()),
         b: parseInt(colorProcessed[2].trim()),
         a: parseInt(colorProcessed[3].trim()),
       };
-    } else if (color.startsWith("rgb(")) {
-      const colorProcessed = color.split("(")[1].split(")")[0].split(",");
+    } else if (color.startsWith('rgb(')) {
+      const colorProcessed = color.split('(')[1].split(')')[0].split(',');
       return {
         r: parseInt(colorProcessed[0].trim()),
         g: parseInt(colorProcessed[1].trim()),
@@ -57,8 +58,7 @@ function colorToRGBA(
       r: color.r,
       g: color.g,
       b: color.b,
-      // @ts-ignore
-      a: Object.keys(color).includes("a") ? color.a : 1,
+      a: Object.keys(color).includes('a') ? color.a : 1,
     };
   }
 }
@@ -68,7 +68,7 @@ export default function interpolateColorBugFix(
   inputRange: readonly number[],
   outputRange: readonly (string | number)[]
 ) {
-  "worklet";
+  'worklet';
   const outputRangeProcessed = outputRange.map((i) => colorToRGBA(i as string));
   const values = {
     r: interpolate(

@@ -1,4 +1,4 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export const setStoreData = async (key: string, value: string) => {
   try {
@@ -7,7 +7,8 @@ export const setStoreData = async (key: string, value: string) => {
     console.log(e);
   }
 };
-
+// eslint-disable-next-line
+//@ts-ignore
 export const getStoreData = async (key: string) => {
   try {
     const value = await AsyncStorage.getItem(key);

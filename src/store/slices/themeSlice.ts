@@ -1,7 +1,7 @@
-import { createSlice } from "@reduxjs/toolkit";
-import { RootState } from "..";
+import { createSlice } from '@reduxjs/toolkit';
+import { RootState } from '..';
 
-import { LightTheme, DarkTheme } from "../../theme";
+import { LightTheme, DarkTheme } from '../../theme';
 
 interface themeSliceState {
   theme: typeof LightTheme;
@@ -12,7 +12,7 @@ const initialState: themeSliceState = {
 };
 
 export const themeSlice = createSlice({
-  name: "theme",
+  name: 'theme',
   initialState,
   reducers: {
     setLightTheme: (state) => {

@@ -1,20 +1,20 @@
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
-import React from "react";
-import { colors, SIZE } from "../utils/constants";
-import { useAppSelector } from "../hooks/storeHooks";
-import { Ionicons } from "@expo/vector-icons";
-import { adjustLetterDisplay } from "../utils/adjustLetterDisplay";
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import React from 'react';
+import { colors, SIZE } from '../utils/constants';
+import { useAppSelector } from '../hooks/storeHooks';
+import { Ionicons } from '@expo/vector-icons';
+import { adjustLetterDisplay } from '../utils/adjustLetterDisplay';
 
 const keysEN: string[][] = [
-  ["q", "w", "e", "r", "t", "y", "u", "i", "o", "p"],
-  ["a", "s", "d", "f", "g", "h", "j", "k", "l"],
-  ["Enter", "z", "x", "c", "v", "b", "n", "m", "<"],
+  ['q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p'],
+  ['a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l'],
+  ['Enter', 'z', 'x', 'c', 'v', 'b', 'n', 'm', '<'],
 ];
 
 const keysTR: string[][] = [
-  ["e", "r", "t", "y", "u", "ı", "o", "p", "ğ", "ü"],
-  ["a", "s", "d", "f", "g", "h", "j", "k", "l", "ş", "i"],
-  ["Enter", "z", "c", "v", "b", "n", "m", "ö", "ç", "<"],
+  ['e', 'r', 't', 'y', 'u', 'ı', 'o', 'p', 'ğ', 'ü'],
+  ['a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', 'ş', 'i'],
+  ['Enter', 'z', 'c', 'v', 'b', 'n', 'm', 'ö', 'ç', '<'],
 ];
 
 interface KeyboardProps {
@@ -23,15 +23,15 @@ interface KeyboardProps {
 
 export default function Keyboard({ handleGuess }: KeyboardProps) {
   const { usedKeys, gameLanguage } = useAppSelector((state) => state.gameState);
-  const keyboard = gameLanguage === "en" ? keysEN : keysTR;
+  const keyboard = gameLanguage === 'en' ? keysEN : keysTR;
   const handleKeyboardKeyColor = (key: string) => {
     const keyData = usedKeys[key];
     if (keyData) {
-      if (keyData === "correct") {
+      if (keyData === 'correct') {
         return colors.correct;
-      } else if (keyData === "present") {
+      } else if (keyData === 'present') {
         return colors.present;
-      } else if (keyData === "absent") {
+      } else if (keyData === 'absent') {
         return colors.absent;
       } else return colors.keyDefault;
     } else return colors.keyDefault;
@@ -55,11 +55,11 @@ export default function Keyboard({ handleGuess }: KeyboardProps) {
                   ...styles.keyContainer,
                   backgroundColor: handleKeyboardKeyColor(keyboardKey),
                   height: SIZE / keyRowCount + 2 + 20,
-                  flex: keyboardKey === "<" || keyboardKey === "Enter" ? 2 : 1,
+                  flex: keyboardKey === '<' || keyboardKey === 'Enter' ? 2 : 1,
                 }}
                 onPress={() => handleGuess(keyboardKey)}
               >
-                {keyboardKey === "<" ? (
+                {keyboardKey === '<' ? (
                   <Ionicons
                     name="backspace-outline"
                     style={{ ...styles.keyboardKey, fontSize: 28 }}
@@ -68,7 +68,7 @@ export default function Keyboard({ handleGuess }: KeyboardProps) {
                   <Text
                     style={{
                       ...styles.keyboardKey,
-                      fontSize: keyboardKey === "Enter" ? 12 : 18,
+                      fontSize: keyboardKey === 'Enter' ? 12 : 18,
                     }}
                   >
                     {adjustLetterDisplay(keyboardKey, gameLanguage)}
@@ -84,25 +84,25 @@ export default function Keyboard({ handleGuess }: KeyboardProps) {
 }
 
 const styles = StyleSheet.create({
-  keyboardContainer: { display: "flex", alignItems: "center" },
+  keyboardContainer: { display: 'flex', alignItems: 'center' },
   keyboardRow: {
     width: SIZE,
     marginBottom: 5,
-    display: "flex",
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   keyContainer: {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
     margin: 2,
     borderRadius: 5,
   },
   keyboardKey: {
-    textTransform: "uppercase",
-    color: "white",
-    fontFamily: "Montserrat_800ExtraBold",
+    textTransform: 'uppercase',
+    color: 'white',
+    fontFamily: 'Montserrat_800ExtraBold',
   },
 });

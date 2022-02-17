@@ -10,4 +10,4 @@ export type matchingUsedKey = {
   [key: string]: matchStatus;
 };
 
-export type matchStatus = "correct" | "present" | "absent" | "";
+export type matchStatus = 'correct' | 'present' | 'absent' | '';

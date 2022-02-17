@@ -1,10 +1,10 @@
-import { useEffect, useRef } from "react";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import AnimatedLottieView from "lottie-react-native";
-import { HEIGHT, initialGuesses, SIZE } from "../utils/constants";
-import { guess } from "../types";
+import { useEffect, useRef } from 'react';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import AnimatedLottieView from 'lottie-react-native';
+import { HEIGHT, initialGuesses, SIZE } from '../utils/constants';
+import { guess, matchStatus } from '../types';
 
-import { useAppSelector, useAppDispatch } from "../hooks/storeHooks";
+import { useAppSelector, useAppDispatch } from '../hooks/storeHooks';
 import {
   setCurrentGuessIndex,
   setGameWon,
@@ -15,10 +15,10 @@ import {
   setWrongGuessShake,
   setGameStarted,
   setGameLanguage,
-} from "../store/slices/gameStateSlice";
-import { answersEN, answersTR, wordsEN, wordsTR } from "../words";
-import GameBoard from "../components/gameBoard";
-import { getStoreData } from "../utils/localStorageFuncs";
+} from '../store/slices/gameStateSlice';
+import { answersEN, answersTR, wordsEN, wordsTR } from '../words';
+import GameBoard from '../components/gameBoard';
+import { getStoreData } from '../utils/localStorageFuncs';
 
 export default function Game() {
   const {
@@ -34,7 +34,7 @@ export default function Game() {
   const dispatch = useAppDispatch();
 
   (async () => {
-    const gameLanguage = (await getStoreData("language")) || "en";
+    const gameLanguage = (await getStoreData('language')) || 'en';
     dispatch(setGameLanguage(gameLanguage));
   })();
 
@@ -42,9 +42,9 @@ export default function Game() {
 
   const wordList = () => {
     switch (gameLanguage) {
-      case "en":
+      case 'en':
         return wordsEN.concat(answersEN);
-      case "tr":
+      case 'tr':
         return wordsTR.concat(answersTR);
       default:
         return wordsEN.concat(answersEN);
@@ -53,25 +53,25 @@ export default function Game() {
 
   const answers = (): string[] => {
     switch (gameLanguage) {
-      case "en":
+      case 'en':
         return answersEN;
-      case "tr":
+      case 'tr':
         return answersTR;
       default:
         return answersEN;
     }
   };
 
-  const handleFoundKeysOnKeyboard = (guess: any) => {
-    let tempUsedKeys = { ...usedKeys };
+  const handleFoundKeysOnKeyboard = (guess: guess) => {
+    const tempUsedKeys = { ...usedKeys };
     guess.letters.forEach((letter: string, idx: number) => {
       const keyValue = tempUsedKeys[letter];
       if (!keyValue) {
-        tempUsedKeys[letter] = guess.matches[idx];
+        tempUsedKeys[letter] = guess.matches[idx] || 'absent';
       } else {
-        if (keyValue === "correct") return;
-        else if (keyValue === "present" && guess.matches[idx] === "correct") {
-          tempUsedKeys[letter] = "correct";
+        if (keyValue === 'correct') return;
+        else if (keyValue === 'present' && guess.matches[idx] === 'correct') {
+          tempUsedKeys[letter] = 'correct';
         }
       }
     });
@@ -92,24 +92,24 @@ export default function Game() {
   }, [currentGuessIndex]);
 
   const updateGuess = (keyPressed: string, currentGuess: guess) => {
-    let currentGuessLetters = [...currentGuess.letters];
+    const currentGuessLetters = [...currentGuess.letters];
     let nextEmptyIndex = currentGuessLetters.findIndex(
-      (letter) => letter === ""
+      (letter) => letter === ''
     );
     if (nextEmptyIndex === -1) nextEmptyIndex = 5;
-    let lastNonEmptyIndex = nextEmptyIndex - 1;
-    if (keyPressed !== "<" && keyPressed !== "Enter" && nextEmptyIndex < 5) {
+    const lastNonEmptyIndex = nextEmptyIndex - 1;
+    if (keyPressed !== '<' && keyPressed !== 'Enter' && nextEmptyIndex < 5) {
       currentGuessLetters[nextEmptyIndex] = keyPressed;
-      let updatedGuess = { ...currentGuess, letters: currentGuessLetters };
-      let updatedGuesses = guesses.map((guess, idx) => {
+      const updatedGuess = { ...currentGuess, letters: currentGuessLetters };
+      const updatedGuesses = guesses.map((guess, idx) => {
         if (idx === currentGuessIndex) return updatedGuess;
         else return guess;
       });
       dispatch(setGuesses([...updatedGuesses]));
-    } else if (keyPressed === "<") {
-      currentGuessLetters[lastNonEmptyIndex] = "";
-      let updatedGuess = { ...currentGuess, letters: currentGuessLetters };
-      let updatedGuesses = guesses.map((guess, idx) => {
+    } else if (keyPressed === '<') {
+      currentGuessLetters[lastNonEmptyIndex] = '';
+      const updatedGuess = { ...currentGuess, letters: currentGuessLetters };
+      const updatedGuesses = guesses.map((guess, idx) => {
         if (idx === currentGuessIndex) return updatedGuess;
         else return guess;
       });
@@ -118,17 +118,23 @@ export default function Game() {
   };
 
   const checkGuess = (currentGuess: guess) => {
-    let currentGuessedWord = currentGuess.letters.join("");
+    const currentGuessedWord = currentGuess.letters.join('');
     if (currentGuessedWord.length === 5) {
       if (currentGuessedWord === solution) {
-        let matches = ["correct", "correct", "correct", "correct", "correct"];
-        let updatedGuess = {
+        const matches: matchStatus[] = [
+          'correct',
+          'correct',
+          'correct',
+          'correct',
+          'correct',
+        ];
+        const updatedGuess = {
           ...currentGuess,
           matches,
           isComplete: true,
           isCorrect: true,
         };
-        let updatedGuesses = guesses.map((guess, idx) => {
+        const updatedGuesses = guesses.map((guess, idx) => {
           if (idx === currentGuessIndex) return updatedGuess;
           else return guess;
         });
@@ -140,43 +146,43 @@ export default function Game() {
           handleFoundKeysOnKeyboard(updatedGuess);
         }, 250 * 6);
       } else if (wordList().includes(currentGuessedWord)) {
-        let matches: string[] = [];
-        currentGuessedWord.split("").forEach((letter, index) => {
-          let leftSlice = currentGuessedWord.slice(0, index + 1);
-          let countInLeft = leftSlice
-            .split("")
+        const matches: matchStatus[] = [];
+        currentGuessedWord.split('').forEach((letter, index) => {
+          const leftSlice = currentGuessedWord.slice(0, index + 1);
+          const countInLeft = leftSlice
+            .split('')
             .filter((item) => item === letter).length;
-          let totalCount = solution
-            .split("")
+          const totalCount = solution
+            .split('')
             .filter((item) => item === letter).length;
-          let nonMatchingPairs = solution
-            .split("")
+          const nonMatchingPairs = solution
+            .split('')
             .filter((item, idx) => currentGuessedWord[idx] !== item);
 
           if (letter === solution[index]) {
-            matches.push("correct");
+            matches.push('correct');
           } else if (solution.includes(letter)) {
             if (
               countInLeft <= totalCount &&
               nonMatchingPairs.includes(letter)
             ) {
-              matches.push("present");
+              matches.push('present');
             } else {
-              matches.push("absent");
+              matches.push('absent');
             }
           } else {
-            matches.push("absent");
+            matches.push('absent');
           }
         });
 
-        let updatedGuess = {
+        const updatedGuess = {
           ...currentGuess,
           matches,
           isComplete: true,
           isCorrect: false,
         };
 
-        let updatedGuesses = guesses.map((guess, idx) => {
+        const updatedGuesses = guesses.map((guess, idx) => {
           if (idx === currentGuessIndex) return updatedGuess;
           else return guess;
         });
@@ -195,11 +201,13 @@ export default function Game() {
 
   const handleGuess = (keyPressed: string) => {
     if (!gameEnded) {
-      let currentGuess = guesses[currentGuessIndex];
-      if (keyPressed !== "Enter" && !currentGuess.isComplete) {
-        updateGuess(keyPressed, currentGuess);
-      } else if (keyPressed === "Enter" && !gameWon) {
-        checkGuess(currentGuess);
+      const currentGuess = guesses[currentGuessIndex];
+      if (currentGuess) {
+        if (keyPressed !== 'Enter' && !currentGuess.isComplete) {
+          updateGuess(keyPressed, currentGuess);
+        } else if (keyPressed === 'Enter' && !gameWon) {
+          checkGuess(currentGuess);
+        }
       }
     }
   };
@@ -224,12 +232,12 @@ export default function Game() {
     return (
       <View style={styles.newGameScreen}>
         <TouchableOpacity onPress={resetGame}>
-          <Text style={{ color: "white", fontSize: 20 }}>Start a new game</Text>
+          <Text style={{ color: 'white', fontSize: 20 }}>Start a new game</Text>
         </TouchableOpacity>
       </View>
     );
   return (
-    <View style={{ position: "relative" }}>
+    <View style={{ position: 'relative' }}>
       <GameBoard
         solution={solution}
         handleGuess={handleGuess}
@@ -238,7 +246,7 @@ export default function Game() {
       <AnimatedLottieView
         ref={lottieRef}
         style={styles.lottieContainer}
-        source={require("../lottie/confetti.json")}
+        source={require('../lottie/confetti.json')}
       />
     </View>
   );
@@ -248,15 +256,15 @@ const styles = StyleSheet.create({
   lottieContainer: {
     width: SIZE,
     height: HEIGHT * 0.5,
-    backgroundColor: "transparent",
-    position: "absolute",
+    backgroundColor: 'transparent',
+    position: 'absolute',
     zIndex: 10,
     top: 20,
   },
   newGameScreen: {
     flex: 1,
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });

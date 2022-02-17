@@ -1,7 +1,7 @@
-import { createSlice } from "@reduxjs/toolkit";
-import { RootState } from "..";
-import { guess, matchingUsedKey } from "../../types";
-import { initialGuesses } from "../../utils/constants";
+import { createSlice } from '@reduxjs/toolkit';
+import { RootState } from '..';
+import { guess, matchingUsedKey } from '../../types';
+import { initialGuesses } from '../../utils/constants';
 
 interface gameState {
   solution: string;
@@ -16,7 +16,7 @@ interface gameState {
 }
 
 const initialState: gameState = {
-  solution: "",
+  solution: '',
   guesses: [...initialGuesses],
   currentGuessIndex: 0,
   usedKeys: {},
@@ -24,11 +24,11 @@ const initialState: gameState = {
   gameEnded: false,
   gameWon: false,
   wrongGuessShake: false,
-  gameLanguage: "en",
+  gameLanguage: 'en',
 };
 
 export const gameStateSlice = createSlice({
-  name: "gameState",
+  name: 'gameState',
   initialState,
   reducers: {
     setSolution: (state, action) => {

@@ -1,5 +1,5 @@
-import { useEffect } from "react";
-import { StyleSheet, Text, Vibration } from "react-native";
+import { useEffect } from 'react';
+import { StyleSheet, Text, Vibration } from 'react-native';
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
@@ -7,13 +7,13 @@ import Animated, {
   Easing,
   withDelay,
   useDerivedValue,
-} from "react-native-reanimated";
-import interpolateColorBugFix from "../utils/interpolateColorFix";
+} from 'react-native-reanimated';
+import interpolateColorBugFix from '../utils/interpolateColorFix';
 
-import { colors, SIZE } from "../utils/constants";
-import { guess } from "../types";
-import { useAppSelector } from "../hooks/storeHooks";
-import { adjustLetterDisplay } from "../utils/adjustLetterDisplay";
+import { colors, SIZE } from '../utils/constants';
+import { guess } from '../types';
+import { useAppSelector } from '../hooks/storeHooks';
+import { adjustLetterDisplay } from '../utils/adjustLetterDisplay';
 
 interface LetterSquareProps {
   guess: guess;
@@ -36,15 +36,15 @@ const LetterSquare = ({ guess, letter, idx }: LetterSquareProps) => {
   const matchStatus = guess.matches[idx];
 
   function matchColor() {
-    "worklet";
+    'worklet';
     switch (matchStatus) {
-      case "correct":
+      case 'correct':
         return colors.correct;
-      case "present":
+      case 'present':
         return colors.present;
-      case "absent":
+      case 'absent':
         return colors.absent;
-      case "":
+      case '':
         return colors.keyDefault;
       default:
         return colors.keyDefault;
@@ -73,7 +73,7 @@ const LetterSquare = ({ guess, letter, idx }: LetterSquareProps) => {
   });
 
   useEffect(() => {
-    if (letter !== "" && matchStatus === "") {
+    if (letter !== '' && matchStatus === '') {
       scale.value = withTiming(1.2, {
         duration: 50,
         easing: Easing.bezier(0.25, 0.1, 0.25, 1),
@@ -81,7 +81,7 @@ const LetterSquare = ({ guess, letter, idx }: LetterSquareProps) => {
       Vibration.vibrate(1);
       scale.value = withDelay(50, withTiming(1));
     }
-    if (matchStatus !== "") {
+    if (matchStatus !== '') {
       rotateDegree.value = withDelay(
         250 * idx,
         withTiming(90, {
@@ -161,17 +161,17 @@ export default LetterSquare;
 
 const styles = StyleSheet.create({
   square: {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
     width: SIZE / 6.5,
     height: SIZE / 6.5,
     borderRadius: 10,
   },
   letter: {
     fontSize: SIZE / 12,
-    fontWeight: "bold",
-    fontFamily: "Montserrat_800ExtraBold",
-    textTransform: "uppercase",
+    fontWeight: 'bold',
+    fontFamily: 'Montserrat_800ExtraBold',
+    textTransform: 'uppercase',
   },
 });

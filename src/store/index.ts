@@ -1,6 +1,6 @@
-import { configureStore } from "@reduxjs/toolkit";
-import gameStateSlice from "./slices/gameStateSlice";
-import themeSlice from "./slices/themeSlice";
+import { configureStore } from '@reduxjs/toolkit';
+import gameStateSlice from './slices/gameStateSlice';
+import themeSlice from './slices/themeSlice';
 
 export const store = configureStore({
   reducer: {
