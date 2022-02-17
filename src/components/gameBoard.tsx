@@ -7,6 +7,7 @@ import LetterSquare from "./letterSquare";
 import { useAppSelector } from "../hooks/storeHooks";
 
 import { colors, HEIGHT, SIZE } from "../utils/constants";
+import { adjustTextDisplay } from "../utils/adjustLetterDisplay";
 
 interface GameBoardProps {
   solution: string;
@@ -15,7 +16,7 @@ interface GameBoardProps {
 }
 
 const GameBoard = ({ solution, handleGuess, resetGame }: GameBoardProps) => {
-  const { guesses, gameEnded, wrongGuessShake } = useAppSelector(
+  const { guesses, gameEnded, wrongGuessShake, gameLanguage } = useAppSelector(
     (state) => state.gameState
   );
 
@@ -40,7 +41,9 @@ const GameBoard = ({ solution, handleGuess, resetGame }: GameBoardProps) => {
       <View style={styles.gameResult}>
         {gameEnded && (
           <>
-            <Text style={styles.solutionText}>Solution: {solution}</Text>
+            <Text style={styles.solutionText}>
+              Solution: {adjustTextDisplay(solution, gameLanguage)}
+            </Text>
             <TouchableOpacity
               style={styles.resetButton}
               onPress={() => resetGame()}

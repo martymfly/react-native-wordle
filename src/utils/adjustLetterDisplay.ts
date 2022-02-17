@@ -9,3 +9,13 @@ export const adjustLetterDisplay = (
       return letter;
   }
 };
+
+export const adjustTextDisplay = (
+  text: string,
+  gameLanguage: string
+): string => {
+  return text
+    .split("")
+    .map((letter) => adjustLetterDisplay(letter, gameLanguage))
+    .join("");
+};

@@ -1,7 +1,6 @@
 import { useEffect } from "react";
 import { StyleSheet, Text, Vibration } from "react-native";
 import Animated, {
-  SlideInRight,
   useSharedValue,
   useAnimatedStyle,
   withTiming,
@@ -135,7 +134,6 @@ const LetterSquare = ({ guess, letter, idx }: LetterSquareProps) => {
 
   return (
     <Animated.View
-      entering={SlideInRight}
       key={idx}
       style={[
         {
