@@ -3,9 +3,9 @@ import React from 'react';
 import { Ionicons } from '@expo/vector-icons';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 
-import { useAppSelector } from '../hooks/storeHooks';
-import { adjustLetterDisplay } from '../utils/adjustLetterDisplay';
-import { colors, SIZE } from '../utils/constants';
+import { useAppSelector } from '../../../hooks/storeHooks';
+import { adjustLetterDisplay } from '../../../utils/adjustLetterDisplay';
+import { colors, SIZE } from '../../../utils/constants';
 
 const keysEN: string[][] = [
   ['q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p'],

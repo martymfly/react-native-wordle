@@ -4,8 +4,8 @@ import { useDispatch } from 'react-redux';
 import {
   setGameLanguage,
   setGameStarted,
-} from '../store/slices/gameStateSlice';
-import { setStoreData } from '../utils/localStorageFuncs';
+} from '../../store/slices/gameStateSlice';
+import { setStoreData } from '../../utils/localStorageFuncs';
 
 export default function Settings() {
   const dispatch = useDispatch();

@@ -3,8 +3,7 @@ import { useEffect, useRef } from 'react';
 import AnimatedLottieView from 'lottie-react-native';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
-import GameBoard from '../components/gameBoard';
-import { useAppSelector, useAppDispatch } from '../hooks/storeHooks';
+import { useAppSelector, useAppDispatch } from '../../hooks/storeHooks';
 import {
   setCurrentGuessIndex,
   setGameWon,
@@ -15,11 +14,12 @@ import {
   setWrongGuessShake,
   setGameStarted,
   setGameLanguage,
-} from '../store/slices/gameStateSlice';
-import { guess, matchStatus } from '../types';
-import { HEIGHT, initialGuesses, SIZE } from '../utils/constants';
-import { getStoreData } from '../utils/localStorageFuncs';
-import { answersEN, answersTR, wordsEN, wordsTR } from '../words';
+} from '../../store/slices/gameStateSlice';
+import { guess, matchStatus } from '../../types';
+import { HEIGHT, initialGuesses, SIZE } from '../../utils/constants';
+import { getStoreData } from '../../utils/localStorageFuncs';
+import { answersEN, answersTR, wordsEN, wordsTR } from '../../words';
+import GameBoard from './components/gameBoard';
 
 export default function Game() {
   const {
@@ -33,7 +33,6 @@ export default function Game() {
     gameLanguage,
   } = useAppSelector((state) => state.gameState);
   const dispatch = useAppDispatch();
-
   (async () => {
     const gameLanguage = (await getStoreData('language')) || 'en';
     dispatch(setGameLanguage(gameLanguage));
@@ -68,12 +67,16 @@ export default function Game() {
     guess.letters.forEach((letter: string, idx: number) => {
       const keyValue = tempUsedKeys[letter];
       if (!keyValue) {
-        tempUsedKeys[letter] = guess.matches[idx] || 'absent';
+        // eslint-disable-next-line
+        // @ts-ignore
+        tempUsedKeys[letter] = guess.matches[idx];
       } else {
         if (keyValue === 'correct') return;
-        else if (keyValue === 'present' && guess.matches[idx] === 'correct') {
+        else if (keyValue && guess.matches[idx] === 'correct') {
           tempUsedKeys[letter] = 'correct';
-        }
+          // eslint-disable-next-line
+          // @ts-ignore
+        } else tempUsedKeys[letter] = guess.matches[idx];
       }
     });
     dispatch(setUsedKeys(tempUsedKeys));
@@ -247,7 +250,7 @@ export default function Game() {
       <AnimatedLottieView
         ref={lottieRef}
         style={styles.lottieContainer}
-        source={require('../lottie/confetti.json')}
+        source={require('../../lottie/confetti.json')}
       />
     </View>
   );

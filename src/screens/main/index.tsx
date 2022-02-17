@@ -12,8 +12,8 @@ import {
 import AppLoading from 'expo-app-loading';
 import { StatusBar } from 'expo-status-bar';
 
-import { useAppSelector } from '../hooks/storeHooks';
-import MainNavigator from '../navigation/mainNavigator';
+import { useAppSelector } from '../../hooks/storeHooks';
+import MainNavigator from '../../navigation/mainNavigator';
 
 export default function MainScreen() {
   const { theme } = useAppSelector((state) => state.theme);

@@ -11,11 +11,11 @@ import Animated, {
   // eslint-disable-next-line
 } from 'react-native-reanimated';
 
-import { useAppSelector } from '../hooks/storeHooks';
-import { guess } from '../types';
-import { adjustLetterDisplay } from '../utils/adjustLetterDisplay';
-import { colors, SIZE } from '../utils/constants';
-import interpolateColorBugFix from '../utils/interpolateColorFix';
+import { useAppSelector } from '../../../hooks/storeHooks';
+import { guess } from '../../../types';
+import { adjustLetterDisplay } from '../../../utils/adjustLetterDisplay';
+import { colors, SIZE } from '../../../utils/constants';
+import interpolateColorBugFix from '../../../utils/interpolateColorFix';
 
 interface LetterSquareProps {
   guess: guess;
