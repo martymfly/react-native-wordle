@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+
 import { StyleSheet, Text, Vibration } from 'react-native';
 import Animated, {
   useSharedValue,
@@ -7,13 +8,14 @@ import Animated, {
   Easing,
   withDelay,
   useDerivedValue,
+  // eslint-disable-next-line
 } from 'react-native-reanimated';
-import interpolateColorBugFix from '../utils/interpolateColorFix';
 
-import { colors, SIZE } from '../utils/constants';
-import { guess } from '../types';
 import { useAppSelector } from '../hooks/storeHooks';
+import { guess } from '../types';
 import { adjustLetterDisplay } from '../utils/adjustLetterDisplay';
+import { colors, SIZE } from '../utils/constants';
+import interpolateColorBugFix from '../utils/interpolateColorFix';
 
 interface LetterSquareProps {
   guess: guess;

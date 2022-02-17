@@ -1,5 +1,6 @@
 import { Button, View } from 'react-native';
 import { useDispatch } from 'react-redux';
+
 import {
   setGameLanguage,
   setGameStarted,

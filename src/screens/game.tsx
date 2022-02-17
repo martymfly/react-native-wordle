@@ -1,9 +1,9 @@
 import { useEffect, useRef } from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import AnimatedLottieView from 'lottie-react-native';
-import { HEIGHT, initialGuesses, SIZE } from '../utils/constants';
-import { guess, matchStatus } from '../types';
 
+import AnimatedLottieView from 'lottie-react-native';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+
+import GameBoard from '../components/gameBoard';
 import { useAppSelector, useAppDispatch } from '../hooks/storeHooks';
 import {
   setCurrentGuessIndex,
@@ -16,9 +16,10 @@ import {
   setGameStarted,
   setGameLanguage,
 } from '../store/slices/gameStateSlice';
-import { answersEN, answersTR, wordsEN, wordsTR } from '../words';
-import GameBoard from '../components/gameBoard';
+import { guess, matchStatus } from '../types';
+import { HEIGHT, initialGuesses, SIZE } from '../utils/constants';
 import { getStoreData } from '../utils/localStorageFuncs';
+import { answersEN, answersTR, wordsEN, wordsTR } from '../words';
 
 export default function Game() {
   const {

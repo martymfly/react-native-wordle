@@ -1,13 +1,12 @@
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+// eslint-disable-next-line
 import Animated, { FadeIn, FadeOut } from 'react-native-reanimated';
 
+import { useAppSelector } from '../hooks/storeHooks';
+import { adjustTextDisplay } from '../utils/adjustLetterDisplay';
+import { colors, HEIGHT, SIZE } from '../utils/constants';
 import Keyboard from './keyboard';
 import LetterSquare from './letterSquare';
-
-import { useAppSelector } from '../hooks/storeHooks';
-
-import { colors, HEIGHT, SIZE } from '../utils/constants';
-import { adjustTextDisplay } from '../utils/adjustLetterDisplay';
 
 interface GameBoardProps {
   solution: string;

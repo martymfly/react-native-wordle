@@ -1,5 +1,5 @@
 {
-    "extends": ["prettier", "eslint:recommended", "plugin:@typescript-eslint/eslint-recommended", "plugin:@typescript-eslint/recommended"],
+    "extends": ["prettier", "eslint:recommended", "plugin:@typescript-eslint/eslint-recommended", "plugin:@typescript-eslint/recommended", "plugin:import/typescript"],
     "parserOptions": {
       "ecmaVersion": 2018,
       "sourceType": "module"
@@ -8,9 +8,41 @@
       "es6": true
     },
     "rules": {
-      "prefer-const": "error"
+      "import/order":[
+        "error",
+        {
+          "groups": ["builtin", "external", "internal"],
+          "pathGroups":[{
+            "pattern": "react",
+            "group": "external",
+            "position": "before"
+          }],
+          "pathGroupsExcludedImportTypes": ["react"],
+          "newlines-between": "always",
+          "alphabetize": {
+            "order": "asc",
+            "caseInsensitive":true
+          }
+        }
+      ],
+      "prefer-const": "error",
+      "import/no-unresolved": [
+        2,
+        {
+          "commonjs": true,
+          "amd": true
+        }
+      ],
+      "import/named": 2,
+      "import/namespace": 2,
+      "import/default": 2,
+      "import/export": 2
     },
     "plugins": [
-      "@typescript-eslint"
-    ]
+      "@typescript-eslint",
+      "import"
+    ],
+    "settings": {
+      "import/ignore": ["react-native"]
+    }
   }

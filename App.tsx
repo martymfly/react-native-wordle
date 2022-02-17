@@ -6,8 +6,9 @@ import {
 } from '@expo-google-fonts/montserrat';
 import AppLoading from 'expo-app-loading';
 import { Provider } from 'react-redux';
-import { store } from './src/store';
+
 import MainScreen from './src/screens/main';
+import { store } from './src/store';
 
 export default function App() {
   const [fontsLoaded] = useFonts({

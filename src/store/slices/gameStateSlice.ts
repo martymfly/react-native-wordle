@@ -1,4 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
+
 import { RootState } from '..';
 import { guess, matchingUsedKey } from '../../types';
 import { initialGuesses } from '../../utils/constants';
