@@ -74,9 +74,11 @@ export default function Game() {
         if (keyValue === 'correct') return;
         else if (keyValue && guess.matches[idx] === 'correct') {
           tempUsedKeys[letter] = 'correct';
-          // eslint-disable-next-line
-          // @ts-ignore
-        } else tempUsedKeys[letter] = guess.matches[idx];
+        } else if (keyValue === 'present' && guess.matches[idx] !== 'correct')
+          return;
+        // eslint-disable-next-line
+        // @ts-ignore
+        else tempUsedKeys[letter] = guess.matches[idx];
       }
     });
     dispatch(setUsedKeys(tempUsedKeys));
