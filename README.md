@@ -8,7 +8,7 @@ This is a clone of Wordle which is a web-based word game developed by Josh Wardl
 
 Players have six attempts to guess a five-letter word, with feedback given for each guess in the form of colored tiles indicating when letters match or occupy the correct position.
 
-https://user-images.githubusercontent.com/14280899/153883176-cf37b000-315f-4247-9421-1c0349c4e6a9.mp4
+https://user-images.githubusercontent.com/14280899/155270770-a1ef41f6-d61a-46b4-87e0-308c2bdee06f.mp4
 
 ### Run project in development
 
