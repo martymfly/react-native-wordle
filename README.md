@@ -3,7 +3,7 @@
       height="80">](https://play.google.com/store/apps/details?id=com.martymfly.wordleger)
 
 <div align="center">
-  <h3 align="center">Worlde Clone with React Native & Expo</h3>
+  <h3 align="center">Wordle Clone with React Native & Expo</h3>
 </div>
 
 ## About The Project
