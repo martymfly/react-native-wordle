@@ -86,7 +86,11 @@ export default function Keyboard({ handleGuess }: KeyboardProps) {
 }
 
 const styles = StyleSheet.create({
-  keyboardContainer: { display: 'flex', alignItems: 'center' },
+  keyboardContainer: {
+    display: 'flex',
+    alignItems: 'center',
+    // marginBottom: 50,
+  },
   keyboardRow: {
     width: SIZE,
     marginBottom: 5,
