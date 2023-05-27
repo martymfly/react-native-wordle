@@ -7,6 +7,7 @@ import { adjustTextDisplay } from '../../../utils/adjustLetterDisplay';
 import { colors, HEIGHT, SIZE } from '../../../utils/constants';
 import Keyboard from './keyboard';
 import LetterSquare from './letterSquare';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 interface GameBoardProps {
   solution: string;
@@ -20,7 +21,7 @@ const GameBoard = ({ solution, handleGuess, resetGame }: GameBoardProps) => {
   );
 
   return (
-    <View style={styles.board}>
+    <SafeAreaView style={styles.board}>
       <View style={styles.blocksContainer}>
         {guesses.map((guess, idx) => (
           <View key={idx} style={styles.squareBlock}>
@@ -62,7 +63,7 @@ const GameBoard = ({ solution, handleGuess, resetGame }: GameBoardProps) => {
         )}
       </View>
       <Keyboard handleGuess={handleGuess} />
-    </View>
+    </SafeAreaView>
   );
 };
 
@@ -71,10 +72,10 @@ export default GameBoard;
 const styles = StyleSheet.create({
   board: {
     width: SIZE,
-    height: HEIGHT,
+    height: HEIGHT * 0.96,
     backgroundColor: colors.bg,
     alignItems: 'center',
-    justifyContent: 'space-evenly',
+    justifyContent: 'space-around',
   },
   squareBlock: {
     width: SIZE * 0.9,
@@ -93,7 +94,7 @@ const styles = StyleSheet.create({
   },
   gameResult: {
     width: SIZE,
-    height: 50,
+    height: 30,
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
